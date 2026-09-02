@@ -28,4 +28,10 @@ urlpatterns=[
     path('department/',include('department.urls')),
     path('country/',include('country.urls')),
     path('employee/',include('employee.urls')),
+    path('brand/',include('brand.urls')),
+    path('categories/',include('category.urls')),
+    path('products/',include('product.urls')),
+    path('stores/',include('store.urls')),
+    path('inventories/',include('inventory.urls')),
+    path('accounts/', include('accounts.urls')),
 ]

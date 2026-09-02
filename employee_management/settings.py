@@ -38,15 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework_simplejwt',
     'employee',
     'department',
     'country',
-    
+    'brand',
+    'drf_yasg',
+    'store',
+    'category',
+    'product',
+    'inventory',
+    'accounts'
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -54,7 +61,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT={
-    'ACCESS_TOKEN_LIFETIME':timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME':timedelta(hours=1),
     'REFRESH_TOKEN_LIFETIME':timedelta(days=1),
 }
 
@@ -125,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-us'   
 
 TIME_ZONE = 'UTC'
 
@@ -138,3 +145,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+ELASTICSEARCH_HOST = "http://localhost:9200"
+
+
+#ShipStation Credentials
+
+SHIP_STATION_API_KEY = "BevVeKAjGbG8xo3Bu/ETK59/bxSSXkRlq4zub2WOD1U"
+
+SHIP_STATION_V2_URL = "api.shipstation.com"

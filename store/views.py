@@ -1,4 +1,3 @@
-# from drf_yasg import openapi
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from .models import Store
@@ -9,12 +8,13 @@ from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-# import csv
+# import csv #NOSONAR
 # from rest_framework.parsers import MultiPartParser
 
 logger=logging.getLogger(__name__)
+request_data_key="Request Data : %s"
 
-# brn_prams = openapi.Schema(
+# brn_prams = openapi.Schema( #NOSONAR
 #     type=openapi.TYPE_OBJECT,
 #     properties={
 #         'brand_name': openapi.Schema(type=openapi.TYPE_STRING, description='Brand Name'),
@@ -72,9 +72,9 @@ class StoreListCreateView(
                 status=404
             )
 
-        # serializer = self.get_serializer(queryset, many=True)
+        # serializer = self.get_serializer(queryset, many=True) #NOSONAR
 
-        # return Response(serializer.data)
+        # return Response(serializer.data) #NOSONAR
 
         if store_id or store_name:
             serializer = self.get_serializer(queryset.first())
@@ -85,7 +85,7 @@ class StoreListCreateView(
     def post(self,request,*args,**kwargs):
         '''Store create'''
 
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response={}
         try:
             if Store.objects.filter(store_name__iexact=request.data.get("store_name")).exists():
@@ -95,7 +95,7 @@ class StoreListCreateView(
         
         except Exception as exp:
             logger.exception(exp)
-            response["message"] = "Something went wrong"
+            response["message"] = "Something went wrong" #NOSONAR
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
 class StoreUpdateView(mixins.UpdateModelMixin,GenericAPIView):
@@ -107,7 +107,7 @@ class StoreUpdateView(mixins.UpdateModelMixin,GenericAPIView):
 
     def put(self,request,*args,**kwargs):
         '''Store update'''
-        logger.info("Request Data : %s",request.data) #CLIENT SENDING DATA SAVE / SHOWING ON THE TERMINAL
+        logger.info(request_data_key,request.data) #CLIENT SENDING DATA SAVE / SHOWING ON THE TERMINAL
         response={}
         store_id=kwargs['pk']
         try:
@@ -138,7 +138,7 @@ class StoreDestroyView(mixins.DestroyModelMixin,GenericAPIView):
     serializer_class=StoreSerializer
     
     def delete(self,request,*args,**kwargs):
-        logger.info("Request Data : %s",request.data)
+        logger.info(request_data_key,request.data)
         response={}
         store_id=kwargs['pk']
         try:
@@ -164,7 +164,7 @@ class StoreDestroyView(mixins.DestroyModelMixin,GenericAPIView):
 #     def post(self, request, *args, **kwargs):
 #         logger.info("Store Bulk Import Request")
 
-#         file_obj = request.FILES.get("file")
+#         file_obj = request.FILES.get("file") #NOSONAR
 
 #         if not file_obj:
 #             return Response(

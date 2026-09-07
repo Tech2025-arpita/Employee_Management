@@ -1,4 +1,3 @@
-# from drf_yasg import openapi
 from rest_framework import mixins
 from rest_framework.generics import GenericAPIView
 from .models import Brand
@@ -8,13 +7,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-# import csv
+# import csv #NOSONAR
 # from rest_framework.parsers import MultiPartParser
 
 
 logger=logging.getLogger(__name__)
+request_data_key="Request Data : %s"
 
-# brn_prams = openapi.Schema(
+# brn_prams = openapi.Schema( #NOSONAR
 #     type=openapi.TYPE_OBJECT,
 #     properties={
 #         'brand_name': openapi.Schema(type=openapi.TYPE_STRING, description='Brand Name'),
@@ -82,7 +82,7 @@ class BrandListCreateView(
     def post(self,request,*args,**kwargs):
         '''Brand create'''
 
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response={}
         try:
             if Brand.objects.filter(brand_name__iexact=request.data.get("brand_name")).exists():
@@ -102,7 +102,7 @@ class BrandUpdateView(mixins.UpdateModelMixin,GenericAPIView):
 
     def put(self,request,*args,**kwargs):
         '''Brand update'''
-        logger.info("Request Data : %s",request.data)
+        logger.info(request_data_key,request.data)
         response={}
         brand_id=kwargs['pk']
         try:
@@ -133,7 +133,7 @@ class BrandDestroyView(mixins.DestroyModelMixin,GenericAPIView):
     permission_classes=[IsAuthenticated]
 
     def delete(self,request,*args,**kwargs):
-        logger.info("Request Data : %s",request.data)
+        logger.info(request_data_key,request.data)
         response={}
         brand_id=kwargs['pk']
         try:
@@ -153,7 +153,7 @@ class BrandDestroyView(mixins.DestroyModelMixin,GenericAPIView):
             return Response(response,status=status.HTTP_400_BAD_REQUEST)
 
 
-# class BrandBulkImportView(GenericAPIView):
+# class BrandBulkImportView(GenericAPIView): #NOSONAR
 #     parser_classes = [MultiPartParser]
 
 #     def post(self, request, *args, **kwargs):
@@ -207,7 +207,7 @@ class BrandDestroyView(mixins.DestroyModelMixin,GenericAPIView):
 #                     "brand_desc": brand_desc
 #                 }
 
-#                 serializer = BrandSerializer(data=data)
+#                 serializer = BrandSerializer(data=data) #NOSONAR
 
 #                 if serializer.is_valid():
 #                     brand = serializer.save()

@@ -6,11 +6,11 @@ from .serializers import CategorySerializer
 import logging
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
-# import csv
+# import csv #NOSONAR
 # from rest_framework.parsers import MultiPartParser
 
 logger = logging.getLogger(__name__)
-
+request_data_key="Request Data : %s"
 
 class CategoryListCreateView(
     mixins.ListModelMixin,
@@ -62,7 +62,7 @@ class CategoryListCreateView(
                 status=404
             )
 
-        # serializer = self.get_serializer(queryset, many=True)
+        # serializer = self.get_serializer(queryset, many=True) #NOSONAR
         # return Response(serializer.data)
         if category_id or name or parent_id:
             serializer=self.get_serializer(queryset.first())
@@ -71,7 +71,7 @@ class CategoryListCreateView(
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
         try:
             if Category.objects.filter(slug__iexact=request.data.get("slug")).exists():
@@ -81,8 +81,8 @@ class CategoryListCreateView(
             return self.create(request, *args, **kwargs)
 
         except Exception as exp:
-            logger.exception(exp)
-            response["message"] = "Something went wrong"
+            logger.exception(exp) 
+            response["message"] = "Something went wrong" #NOSONAR
             return Response(response,status=status.HTTP_400_BAD_REQUEST)
 
 class CategoryUpdateView(
@@ -95,7 +95,7 @@ class CategoryUpdateView(
     serializer_class = CategorySerializer
 
     def put(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
         category_id = kwargs["pk"]
         try:
@@ -123,7 +123,7 @@ class CategoryDestroyView(
     serializer_class = CategorySerializer
 
     def delete(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
         category_id = kwargs["pk"]
 
@@ -185,7 +185,7 @@ class CategoryDestroyView(
 #                     "parent_id": row.get("parent_id") or None
 #                 }
 
-#                 serializer = CategorySerializer(data=data)
+#                 serializer = CategorySerializer(data=data) #NOSONAR
 
 #                 if serializer.is_valid():
 

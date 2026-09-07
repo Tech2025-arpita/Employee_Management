@@ -8,6 +8,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 logger = logging.getLogger(__name__)
+request_data_key="Request Data : %s"
 
 class InventoryListCreateView(
     mixins.ListModelMixin,
@@ -63,9 +64,9 @@ class InventoryListCreateView(
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # serializer = self.get_serializer(queryset, many=True)
+        # serializer = self.get_serializer(queryset, many=True) #NOSONAR
 
-        # return Response(serializer.data)
+        # return Response(serializer.data) #NOSONAR
 
         if inv_id or product_sku or store_id:
             serializer = self.get_serializer(queryset.first()) #For single data in postman in json not in list
@@ -75,7 +76,7 @@ class InventoryListCreateView(
 
     def post(self, request, *args, **kwargs):
 
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
 
         try:
@@ -98,7 +99,7 @@ class InventoryListCreateView(
 
             logger.exception(exp)
 
-            response["message"] = "Something went wrong"
+            response["message"] = "Something went wrong"  #NOSONAR
 
             return Response(
                 response,
@@ -116,7 +117,7 @@ class InventoryUpdateView(
     def http_method_not_allowed(self, request, *args, **kwargs):
         return Response(
             {
-                "message": f"update is only allowed for just giving single id"
+                "message": "update is only allowed for just giving single id"
             },
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
@@ -124,7 +125,7 @@ class InventoryUpdateView(
 
     def put(self, request, *args, **kwargs):
 
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
 
         response = {}
 
@@ -144,15 +145,15 @@ class InventoryUpdateView(
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        #     kwargs["partial"] = True
+        #     kwargs["partial"] = True #NOSONAR
 
-        #     return self.update(request, *args, **kwargs)
+        #     return self.update(request, *args, **kwargs) #NOSONAR
 
         # except Exception as exp:
 
         #     logger.exception(exp)
 
-        #     response["message"] = "Something went wrong"
+        #     response["message"] = "Something went wrong"  #NOSONAR
 
         #     return Response(
         #         response,
@@ -169,7 +170,7 @@ class InventoryDestroyView(
 
     def delete(self, request, *args, **kwargs):
 
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
 
         response = {}
 

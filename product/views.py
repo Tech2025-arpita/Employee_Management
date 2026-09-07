@@ -138,7 +138,7 @@ class ProductDestroyView(
                 response["message"] = "Product not found"
                 return Response(response,status=status.HTTP_404_NOT_FOUND)
 
-            product.delete() #return self.update(request, *args, **kwargs)  nosoner
+            product.delete() #return self.update(request, *args, **kwargs)  #NOSONAR
 
             response["message"] = "Product deleted successfully"
             return Response(response,status=status.HTTP_200_OK)

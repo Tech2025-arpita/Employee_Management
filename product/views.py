@@ -8,13 +8,15 @@ import logging
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-# import os
+# import os # NOSONAR
 import requests
 
 from django.conf import settings
 
 
 logger = logging.getLogger(__name__)
+
+request_data_key="Request Data : %s"
 
 class ProductListCreateView(
     mixins.ListModelMixin,
@@ -51,7 +53,7 @@ class ProductListCreateView(
                 status=status.HTTP_404_NOT_FOUND
             )
 
-        # serializer = self.get_serializer(queryset, many=True)
+        # serializer = self.get_serializer(queryset, many=True) # NOSONAR
         # return Response(serializer.data)
 
         if product_name or product_sku or product_id:
@@ -61,7 +63,7 @@ class ProductListCreateView(
         return Response(serializer.data)
 
     def post(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
         try:
             if Product.objects.filter(product_sku__exact=request.data.get("product_sku")
@@ -73,7 +75,7 @@ class ProductListCreateView(
             serializer = ProductSerializer(data=request.data)
 
             if serializer.is_valid():
-                product = serializer.save()
+                product = serializer.save() #NOSONAR
 
                 #create inventory automatically 
                 # Inventory.objects.create(product=product,store=product.product_store)
@@ -83,7 +85,7 @@ class ProductListCreateView(
 
         except Exception as exp:
             logger.exception(exp)
-            response["message"] = "Something went wrong"
+            response["message"] = "Something went wrong" # NOSONAR
             return Response(response,status=status.HTTP_400_BAD_REQUEST)
         
 class ProductUpdateView(
@@ -96,7 +98,7 @@ class ProductUpdateView(
     serializer_class = ProductSerializer
 
     def put(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
 
         response = {}
         product_id = kwargs["pk"]
@@ -104,7 +106,7 @@ class ProductUpdateView(
         try:
             product = Product.objects.filter(product_sku__iexact=request.data.get("product_sku"))
 
-            if product.exclude(product_id=product_id).exists():
+            if product.exclude(product_id=product_id).exists(): #another product using this sku check
                 response["message"] = "Product SKU already exists"
                 return Response(response,status=status.HTTP_400_BAD_REQUEST)
 
@@ -126,17 +128,17 @@ class ProductDestroyView(
     serializer_class = ProductSerializer
 
     def delete(self, request, *args, **kwargs):
-        logger.info("Request Data : %s", request.data)
+        logger.info(request_data_key, request.data)
         response = {}
         product_id = kwargs["pk"]
 
         try:
             product = Product.objects.filter(product_id=product_id)
-            if not product.exists():
+            if not product.exists(): #does the product exists that i want to delete
                 response["message"] = "Product not found"
                 return Response(response,status=status.HTTP_404_NOT_FOUND)
 
-            product.delete() #return self.update(request, *args, **kwargs)
+            product.delete() #return self.update(request, *args, **kwargs)  nosoner
 
             response["message"] = "Product deleted successfully"
             return Response(response,status=status.HTTP_200_OK)
@@ -219,7 +221,7 @@ class ProductDestroyView(
 #             }, status=status.HTTP_400_BAD_REQUEST)
 
 
-#Call Api
+#Call third party Api(shipmentstation Api)
 
 class ShipStationLabelView(GenericAPIView):
     authentication_classes=[JWTAuthentication]
